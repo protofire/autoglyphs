@@ -1,0 +1,25 @@
+{
+	"name": "autoglyphs",
+	"version": "1.0.0",
+	"description": "avastars-subgraph",
+	"license": "MIT",
+	"scripts": {
+		"codegen": "graph codegen",
+		"build": "graph build",
+		"deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ protofire/autoglyphs"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/protofire/autoglyphs.git"
+	},
+	"author": "",
+	"bugs": {
+		"url": "https://github.com/protofire/autoglyphs/issues"
+	},
+	"homepage": "https://github.com/protofire/autoglyphs#readme",
+	"dependencies": {
+		"@graphprotocol/graph-cli": "^0.20.0",
+		"@graphprotocol/graph-ts": "0.20.0",
+		"@protofire/subgraph-toolkit": "^0.1.2"
+	}
+}
