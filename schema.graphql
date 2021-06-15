@@ -26,6 +26,9 @@ type Token implements Erc721Token @entity{
 
 	"Current burned status"
 	burned: Boolean
+
+	"Tokens' visual representation"
+	uri: String
 }
 
 "A 721 holder account"
