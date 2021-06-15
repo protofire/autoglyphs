@@ -1,0 +1,135 @@
+interface Erc721Token {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Token's current owner"
+	owner: Account!
+
+	"Current approval"
+	approval: Account
+
+	"Current burned status"
+	burned: Boolean
+
+	# More info about it?
+}
+
+type Token implements Erc721Token @entity{
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Token's current owner"
+	owner: Account!
+
+	"Current approval"
+	approval: Account
+
+	"Current burned status"
+	burned: Boolean
+}
+
+"A 721 holder account"
+type Account @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Account evm address"
+	address: Bytes
+
+	"Owned tokens"
+	tokens: [Token!]! @derivedFrom(field: "owner")
+
+	"Approved tokens"
+	approved: [Token!]! @derivedFrom(field: "approval")
+	
+	"Transactions sent by this account"
+	sent: [Transaction!] @derivedFrom(field: "from")
+ 
+	"Transactions recieved by this account"
+	recieved: [Transaction!] @derivedFrom(field: "to")
+}
+
+enum TranasctionType { 
+	MINT,
+	BURN,
+	TRANSFER
+ }
+
+
+interface Transaction {
+ 	"Internal ID used for indexation"
+	id: ID!
+
+	"Transaction creation timestamp"
+	timestamp: BigInt!
+
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
+	"Current transaction type"
+	type: TranasctionType!
+}
+
+
+type Mint implements Transaction @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
+	"Token traded"
+	token: Token
+
+	"Transaction creation timestamp"
+	timestamp: BigInt!
+
+	"Current transaction type"
+	type: TranasctionType!
+}
+
+type Burn implements Transaction @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
+	"Token traded"
+	token: Token
+
+	"Transaction creation timestamp"
+	timestamp: BigInt!
+
+	"Current transaction type"
+	type: TranasctionType!
+}
+
+type Transfer implements Transaction @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
+	"Token traded"
+	token: Token
+
+	"Transaction creation timestamp"
+	timestamp: BigInt!
+
+	"Current transaction type"
+	type: TranasctionType!
+}
