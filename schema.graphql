@@ -63,6 +63,12 @@ interface Transaction {
 	"Transaction creation timestamp"
 	timestamp: BigInt!
 
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
 	"Current transaction type"
 	type: TranasctionType!
 }
