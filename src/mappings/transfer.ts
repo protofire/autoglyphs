@@ -1,7 +1,10 @@
 import { ADDRESS_ZERO } from '@protofire/subgraph-toolkit'
 import { BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { Transfer } from "../../generated/autoglyphs/autoglyphs";
-import { accounts } from "../modules";
+import {
+	accounts,
+	transactions
+} from "../modules";
 
 
 function handleMint(to: Bytes, tokenId: string, timestamp: BigInt): void {
@@ -11,8 +14,8 @@ function handleMint(to: Bytes, tokenId: string, timestamp: BigInt): void {
 	// let avastar = tokens.getNewAvastar(tokenId, account.id)
 	// avastar.save()
 
-	// let transaction = transactions.getNewMint(account.id, tokenId, timestamp)
-	// transaction.save()
+	let transaction = transactions.getNewMint(account.id, tokenId, timestamp)
+	transaction.save()
 }
 
 
@@ -24,8 +27,8 @@ function handleBurn(from: Bytes, tokenId: string, timestamp: BigInt): void {
 	// let avastar = tokens.changeOwner(tokenId, ADDRESS_ZERO)
 	// avastar.save()
 
-	// let transaction = transactions.getNewBurn(account.id, tokenId, timestamp)
-	// transaction.save()
+	let transaction = transactions.getNewBurn(account.id, tokenId, timestamp)
+	transaction.save()
 }
 
 function handleRegularTransfer(from: Bytes, to: Bytes, tokenId: string, timestamp: BigInt): void {
@@ -39,8 +42,8 @@ function handleRegularTransfer(from: Bytes, to: Bytes, tokenId: string, timestam
 	// let avastar = tokens.changeOwner(tokenId, buyer.id)
 	// avastar.save()
 
-	// let transaction = transactions.getNewTransfer(seller.id, buyer.id, tokenId, timestamp)
-	// transaction.save()
+	let transaction = transactions.getNewTransfer(seller.id, buyer.id, tokenId, timestamp)
+	transaction.save()
 }
 
 
