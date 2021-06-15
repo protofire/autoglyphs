@@ -1,0 +1,32 @@
+specVersion: 0.0.2
+description: Subgraph for autoglyphs
+repository: https://github.com/protofire/autoglyphs
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: autoglyphs
+    network: mainnet
+    source:
+      address: "0xd4e4078ca3495DE5B1d4dB434BEbc5a986197782"
+      abi: autoglyphs
+      startBlock: 7510386
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+      abis:
+        - name: autoglyphs
+          file: ./abis/autoglyphs.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: Generated(indexed uint256,indexed address,string)
+          handler: handleGenerated
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mappings/index.ts
