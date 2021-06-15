@@ -3,7 +3,8 @@ import { BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { Transfer } from "../../generated/autoglyphs/autoglyphs";
 import {
 	accounts,
-	transactions
+	transactions,
+	tokens
 } from "../modules";
 
 
@@ -11,8 +12,8 @@ function handleMint(to: Bytes, tokenId: string, timestamp: BigInt): void {
 	let account = accounts.getOrCreateAccount(to)
 	account.save()
 
-	// let avastar = tokens.getNewAvastar(tokenId, account.id)
-	// avastar.save()
+	let token = tokens.mintToken(tokenId)
+	token.save()
 
 	let transaction = transactions.getNewMint(account.id, tokenId, timestamp)
 	transaction.save()
@@ -24,8 +25,8 @@ function handleBurn(from: Bytes, tokenId: string, timestamp: BigInt): void {
 	let account = accounts.getOrCreateAccount(from)
 	account.save()
 
-	// let avastar = tokens.changeOwner(tokenId, ADDRESS_ZERO)
-	// avastar.save()
+	let token = tokens.burnToken(tokenId)
+	token.save()
 
 	let transaction = transactions.getNewBurn(account.id, tokenId, timestamp)
 	transaction.save()
@@ -39,8 +40,8 @@ function handleRegularTransfer(from: Bytes, to: Bytes, tokenId: string, timestam
 	let buyer = accounts.getOrCreateAccount(to)
 	buyer.save()
 
-	// let avastar = tokens.changeOwner(tokenId, buyer.id)
-	// avastar.save()
+	let token = tokens.changeOwner(tokenId, buyer.id)
+	token.save()
 
 	let transaction = transactions.getNewTransfer(seller.id, buyer.id, tokenId, timestamp)
 	transaction.save()
