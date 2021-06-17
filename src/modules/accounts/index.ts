@@ -38,6 +38,6 @@ export namespace accounts {
 			operatorOwner.operator = operatorId
 		}
 		operatorOwner.approved = approved
-		return operatorOwner
+		return operatorOwner as OperatorOwner
 	}
 }
