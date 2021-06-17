@@ -3,7 +3,7 @@ import { Token } from "../../../generated/schema";
 
 
 export namespace tokens {
-	export function getNewToken(tokenId: string, accountId: string): Token {
+	export function getOrCreateToken(tokenId: string, accountId: string): Token {
 		let token = Token.load(tokenId)
 		if (token == null) {
 			token = new Token(tokenId)
@@ -26,10 +26,18 @@ export namespace tokens {
 		return token as Token
 	}
 
-	export function mintToken(
-		tokenId: string
+	export function addUri(
+		tokenId: string, owner: string, uri: string
 	): Token {
-		let token = loadToken(tokenId)
+		let token = getOrCreateToken(tokenId, owner)
+		token.uri = uri
+		return token as Token
+	}
+
+	export function mintToken(
+		tokenId: string, owner: string
+	): Token {
+		let token = getOrCreateToken(tokenId, owner)
 		token.burned = false
 		return token as Token
 	}
