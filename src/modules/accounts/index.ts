@@ -1,9 +1,19 @@
-import { BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { integer } from '@protofire/subgraph-toolkit'
-
-import { Account } from '../../../generated/schema'
+import { Bytes } from '@graphprotocol/graph-ts';
+import { Account, OperatorOwner } from '../../../generated/schema'
 
 export namespace accounts {
+
+	export namespace helpers {
+
+		export function getOperatorOwnerId(
+			ownerId: string,
+			operatorId: string
+		): string {
+			return ownerId.concat("-".concat(operatorId))
+		}
+
+	}
+
 	export function getOrCreateAccount(accountAddress: Bytes): Account {
 		let accountId = accountAddress.toHex()
 
@@ -13,5 +23,21 @@ export namespace accounts {
 			account.address = accountAddress
 		}
 		return account as Account
+	}
+
+
+	export function getOrCreateOperatorOwner(
+		ownerId: string, operatorId: string,
+		approved: boolean
+	): OperatorOwner {
+		let operatorOwnerId = helpers.getOperatorOwnerId(ownerId, operatorId)
+		let operatorOwner = OperatorOwner.load(operatorOwnerId)
+		if (operatorOwner == null) {
+			operatorOwner = new OperatorOwner(operatorOwnerId)
+			operatorOwner.owner = ownerId
+			operatorOwner.operator = operatorId
+		}
+		operatorOwner.approved = approved
+		return operatorOwner
 	}
 }

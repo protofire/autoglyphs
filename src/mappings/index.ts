@@ -8,7 +8,10 @@ import {
 
 import { transfer } from "./transfer"
 
-import { tokens } from "../modules/tokens";
+import {
+	tokens,
+	accounts
+} from "../modules";
 
 
 
@@ -30,10 +33,32 @@ export function handleTransfer(event: Transfer): void {
 }
 
 export function handleApproval(event: Approval): void {
+	let tokenId = event.params._tokenId.toHex()
+	let ownerAddress = event.params._owner
+	let approvedAddress = event.params._approved
 
+	let approved = accounts.getOrCreateAccount(approvedAddress)
+	approved.save()
+
+	let owner = accounts.getOrCreateAccount(ownerAddress)
+	owner.save()
+
+	let token = tokens.addApproval(tokenId, approvedAddress.toHex())
+	token.save()
 }
 
 export function handleApprovalForAll(event: ApprovalForAll): void {
+	let ownerAddress = event.params._owner
+	let operatorAddress = event.params._operator
+
+	let owner = accounts.getOrCreateAccount(ownerAddress)
+	owner.save()
+
+	let operator = accounts.getOrCreateAccount(operatorAddress)
+	operator.save()
+
+	let operatorOwner = accounts.getOrCreateOperatorOwner(owner.id, operator.id, event.params._approved)
+	operatorOwner.save()
 
 }
 

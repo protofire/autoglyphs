@@ -52,6 +52,20 @@ type Account @entity {
 	recieved: [Transaction!] @derivedFrom(field: "to")
 }
 
+type OperatorOwner @entity {
+	"Internal ID used for indexation"
+	id: ID! # Set to `${owner.id}-${operator.id}`
+
+	"Owner of the tokens"
+	owner: Account
+
+	"Approved to transfer tokens"
+	operator: Account!
+
+	"Was approved"
+	approved: Boolean
+}
+
 enum TranasctionType { 
 	MINT,
 	BURN,
