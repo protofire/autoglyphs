@@ -23,36 +23,36 @@ export namespace transactions {
 	}
 
 	export function getNewMint(
-		to: string, token: string, timestamp: BigInt
+		to: string, token: string, timestamp: BigInt, blockId: string
 	): Mint {
 		let transaction = new Mint(helpers.getNewTransactionId(ADDRESS_ZERO, to, timestamp))
 		transaction.from = ADDRESS_ZERO
 		transaction.to = to
 		transaction.token = token
-		transaction.timestamp = timestamp
+		transaction.block = blockId
 		transaction.type = constants.TRANSACTION_MINT
 		return transaction as Mint
 	}
 
-	export function getNewBurn(from: string, token: string, timestamp: BigInt): Burn {
+	export function getNewBurn(from: string, token: string, timestamp: BigInt, blockId: string): Burn {
 		let transaction = new Burn(helpers.getNewTransactionId(from, ADDRESS_ZERO, timestamp))
 		transaction.from = from
 		transaction.to = ADDRESS_ZERO
 		transaction.token = token
-		transaction.timestamp = timestamp
+		transaction.block = blockId
 		transaction.type = constants.TRANSACTION_BURN
 		return transaction as Burn
 	}
 
 	export function getNewTransfer(
 		from: string, to: string,
-		token: string, timestamp: BigInt
+		token: string, timestamp: BigInt, blockId: string
 	): Transfer {
 		let transaction = new Transfer(helpers.getNewTransactionId(from, to, timestamp))
 		transaction.from = from
 		transaction.to = to
 		transaction.token = token
-		transaction.timestamp = timestamp
+		transaction.block = blockId
 		transaction.type = constants.TRANSACTION_TRANSFER
 		return transaction as Transfer
 	}

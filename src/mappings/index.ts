@@ -29,11 +29,11 @@ export function handleTransfer(event: Transfer): void {
 	block.save()
 
 	if (from == ADDRESS_ZERO) {
-		transfer.handleMint(event.params._to, tokenId, timestamp)
+		transfer.handleMint(event.params._to, tokenId, timestamp, blockId)
 	} else if (to == ADDRESS_ZERO) {
-		transfer.handleBurn(event.params._from, tokenId, timestamp)
+		transfer.handleBurn(event.params._from, tokenId, timestamp, blockId)
 	} else {
-		transfer.handleRegularTransfer(event.params._from, event.params._to, tokenId, timestamp)
+		transfer.handleRegularTransfer(event.params._from, event.params._to, tokenId, timestamp, blockId)
 	}
 
 }
