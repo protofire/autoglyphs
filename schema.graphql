@@ -1,3 +1,45 @@
+interface Metadata {
+	"Internal ID used for indexation"
+	id: ID!
+}
+
+type Block implements Metadata @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"event timestamp"
+	timestamp: BigInt!	
+	
+	"Block's number"
+    number: BigInt!
+
+	"Transactions contained in this block"
+	transactions: [Transaction!] @derivedFrom(field: "block")
+
+	"Chain transactions info"
+	transactionsMeta: [TransactionMeta!] @derivedFrom(field: "block")
+}
+
+type TransactionMeta implements Metadata @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Transaction's Block"
+	block: Block!
+
+	"Transaction's hash"
+	hash: Bytes
+
+	"Sender Address"
+	from: Bytes
+
+	"Transaction's gas"
+    gasUsed: BigInt
+
+	"Transaction's gas price"
+    gasPrice: BigInt
+}
+
 interface Erc721Token {
 	"Internal ID used for indexation"
 	id: ID!
@@ -77,9 +119,6 @@ interface Transaction {
  	"Internal ID used for indexation"
 	id: ID!
 
-	"Transaction creation timestamp"
-	timestamp: BigInt!
-
 	"Seller account"
 	from: Account
 
@@ -88,6 +127,9 @@ interface Transaction {
 
 	"Current transaction type"
 	type: TranasctionType!
+
+	"Related block"
+	block: Block!
 }
 
 
@@ -104,8 +146,8 @@ type Mint implements Transaction @entity {
 	"Token traded"
 	token: Token
 
-	"Transaction creation timestamp"
-	timestamp: BigInt!
+	"Related block"
+	block: Block!
 
 	"Current transaction type"
 	type: TranasctionType!
@@ -124,8 +166,8 @@ type Burn implements Transaction @entity {
 	"Token traded"
 	token: Token
 
-	"Transaction creation timestamp"
-	timestamp: BigInt!
+	"Related block"
+	block: Block!
 
 	"Current transaction type"
 	type: TranasctionType!
@@ -144,8 +186,8 @@ type Transfer implements Transaction @entity {
 	"Token traded"
 	token: Token
 
-	"Transaction creation timestamp"
-	timestamp: BigInt!
+	"Related block"
+	block: Block!
 
 	"Current transaction type"
 	type: TranasctionType!
