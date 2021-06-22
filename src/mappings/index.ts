@@ -11,7 +11,8 @@ import { transfer } from "./transfer"
 import {
 	tokens,
 	accounts,
-	blocks
+	blocks,
+	transactionsMeta
 } from "../modules";
 
 
@@ -23,10 +24,21 @@ export function handleTransfer(event: Transfer): void {
 	let tokenId = event.params._tokenId.toHex()
 	let blockNumber = event.block.number
 	let blockId = blockNumber.toString()
+	let txHash = event.transaction.hash
 	let timestamp = event.block.timestamp
 
 	let block = blocks.getOrCreateBlock(blockId, timestamp, blockNumber)
 	block.save()
+
+	let meta = transactionsMeta.getOrCreateTransactionMeta(
+		txHash.toHexString(),
+		blockId,
+		txHash,
+		event.transaction.from,
+		event.transaction.gasUsed,
+		event.transaction.gasPrice,
+	)
+	meta.save()
 
 	if (from == ADDRESS_ZERO) {
 		transfer.handleMint(event.params._to, tokenId, timestamp, blockId)

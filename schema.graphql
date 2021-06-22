@@ -1,9 +1,6 @@
 interface Metadata {
 	"Internal ID used for indexation"
 	id: ID!
-
-	"event timestamp"
-	timestamp: BigInt!	
 }
 
 type Block implements Metadata @entity {
@@ -18,6 +15,29 @@ type Block implements Metadata @entity {
 
 	"Transactions contained in this block"
 	transactions: [Transaction!] @derivedFrom(field: "block")
+
+	"Chain transactions info"
+	transactionsMeta: [TransactionMeta!] @derivedFrom(field: "block")
+}
+
+type TransactionMeta implements Metadata @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Transaction's Block"
+	block: Block!
+
+	"Transaction's hash"
+	hash: Bytes
+
+	"Sender Address"
+	from: Bytes
+
+	"Transaction's gas"
+    gasUsed: BigInt
+
+	"Transaction's gas price"
+    gasPrice: BigInt
 }
 
 interface Erc721Token {
