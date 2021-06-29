@@ -1,0 +1,194 @@
+interface Metadata {
+	"Internal ID used for indexation"
+	id: ID!
+}
+
+type Block implements Metadata @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"event timestamp"
+	timestamp: BigInt!	
+	
+	"Block's number"
+    number: BigInt!
+
+	"Transactions contained in this block"
+	transactions: [Transaction!] @derivedFrom(field: "block")
+
+	"Chain transactions info"
+	transactionsMeta: [TransactionMeta!] @derivedFrom(field: "block")
+}
+
+type TransactionMeta implements Metadata @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Transaction's Block"
+	block: Block!
+
+	"Transaction's hash"
+	hash: Bytes
+
+	"Sender Address"
+	from: Bytes
+
+	"Transaction's gas"
+    gasUsed: BigInt
+
+	"Transaction's gas price"
+    gasPrice: BigInt
+}
+
+interface Erc721Token {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Token's current owner"
+	owner: Account!
+
+	"Current approval"
+	approval: Account
+
+	"Current burned status"
+	burned: Boolean
+
+	# More info about it?
+}
+
+type Token implements Erc721Token @entity{
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Token's current owner"
+	owner: Account!
+
+	"Current approval"
+	approval: Account
+
+	"Current burned status"
+	burned: Boolean
+
+	"Tokens' visual representation"
+	uri: String
+}
+
+"A 721 holder account"
+type Account @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Account evm address"
+	address: Bytes
+
+	"Owned tokens"
+	tokens: [Token!]! @derivedFrom(field: "owner")
+
+	"Approved tokens"
+	approved: [Token!]! @derivedFrom(field: "approval")
+	
+	"Transactions sent by this account"
+	sent: [Transaction!] @derivedFrom(field: "from")
+ 
+	"Transactions recieved by this account"
+	recieved: [Transaction!] @derivedFrom(field: "to")
+}
+
+type OperatorOwner @entity {
+	"Internal ID used for indexation"
+	id: ID! # Set to `${owner.id}-${operator.id}`
+
+	"Owner of the tokens"
+	owner: Account
+
+	"Approved to transfer tokens"
+	operator: Account!
+
+	"Was approved"
+	approved: Boolean
+}
+
+enum TranasctionType { 
+	MINT,
+	BURN,
+	TRANSFER
+ }
+
+
+interface Transaction {
+ 	"Internal ID used for indexation"
+	id: ID!
+
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
+	"Current transaction type"
+	type: TranasctionType!
+
+	"Related block"
+	block: Block!
+}
+
+
+type Mint implements Transaction @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
+	"Token traded"
+	token: Token
+
+	"Related block"
+	block: Block!
+
+	"Current transaction type"
+	type: TranasctionType!
+}
+
+type Burn implements Transaction @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
+	"Token traded"
+	token: Token
+
+	"Related block"
+	block: Block!
+
+	"Current transaction type"
+	type: TranasctionType!
+}
+
+type Transfer implements Transaction @entity {
+	"Internal ID used for indexation"
+	id: ID!
+
+	"Seller account"
+	from: Account
+
+	"Buyer account"
+	to: Account
+
+	"Token traded"
+	token: Token
+
+	"Related block"
+	block: Block!
+
+	"Current transaction type"
+	type: TranasctionType!
+}
